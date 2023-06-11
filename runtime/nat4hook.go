@@ -47,6 +47,9 @@ func NewNat4Hooks() Nat4Hook {
 
 // Runs IPv4 NAT init hook
 func (hook Nat4Hook) RunInit() error {
+	if !hook.isset {
+		return nil
+	}
 	if err := runIP4Tables("-I", "FORWARD", "-j", "ACCEPT"); err != nil {
 		return err
 	}
@@ -60,6 +63,9 @@ func (hook Nat4Hook) RunInit() error {
 
 // Runs IPv4 NAT exit hook
 func (hook Nat4Hook) RunExit() error {
+	if !hook.isset {
+		return nil
+	}
 	errcount := 0
 	var lasterr error
 	for _, iface := range hook.ifaces {

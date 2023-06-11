@@ -57,6 +57,9 @@ func NewIPRouteHook(name string, env string) IPRouteHook {
 
 // Run the hook if it is set
 func (hook IPRouteHook) Run() error {
+	if !hook.isset {
+		return nil
+	}
 	for _, r := range hook.routes {
 		r = append(r, "proto", "static")
 		if err := runIPRoute(r...); err != nil {
