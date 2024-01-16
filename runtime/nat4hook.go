@@ -37,7 +37,7 @@ func NewNat4Hooks() Nat4Hook {
 		ifaces_l := strings.Split(ifaces, "\n")
 		hook.ifaces = make([]string, len(ifaces_l))
 		for i, iface := range ifaces_l {
-			hook.ifaces[i] = strings.TrimSpace(strings.TrimLeft(strings.TrimSpace(iface), "-"))
+			hook.ifaces[i] = strings.TrimSpace(strings.TrimLeft(strings.Split(strings.TrimSpace(iface), "#")[0], "-"))
 		}
 		hook.isset = true
 	}

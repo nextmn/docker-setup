@@ -48,7 +48,7 @@ func NewIPRouteHook(name string, env string) IPRouteHook {
 
 		hook.routes = make([][]string, len(rl))
 		for i, route := range rl {
-			hook.routes[i] = strings.Split(strings.TrimSpace(strings.TrimLeft(strings.TrimSpace(route), "-")), " ")
+			hook.routes[i] = strings.Split(strings.TrimSpace(strings.TrimLeft(strings.Split(strings.TrimSpace(route), "#")[0], "-")), " ")
 		}
 		hook.isset = true
 	}
