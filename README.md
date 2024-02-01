@@ -7,10 +7,11 @@ This program only use environment variables for its configuration:
 - `NAT4_IFACES` is a list of interfaces where MASQUERADE will be enabled
 - `ROUTES_INIT` is a list of routes modifications that will be performed on init
 - `ROUTES_EXIT` is a list of routes modifications that will be performed on exit 
-- `PRE_INIT_HOOK` is a command that is run before the init (nat & routes init). The command can takes some arguments from `PRE_INIT_HOOK_0`, `PRE_INIT_HOOK_1`, and so on.
-- `POST_INIT_HOOK` is a command that is run after the init (nat & routes init). The command can takes some arguments from `POST_INIT_HOOK_0`, `POST_INIT_HOOK_1`, and so on.
-- `PRE_EXIT_HOOK` is a command that is run before the exit (nat & routes cleaning). The command can takes some arguments from `PRE_EXIT_HOOK_0`, `PRE_EXIT_HOOK_1`, and so on.
-- `POST_EXIT_HOOK` is a command that is run after the exit (nat & routes cleaning). The command can takes some arguments from `POST_EXIT_HOOK_0`, `POST_EXIT_HOOK_1`, and so on.
+- `PRE_INIT_HOOK` is a command that is run before the init (nat & routes init). The command can take some arguments from `PRE_INIT_HOOK_0`, `PRE_INIT_HOOK_1`, and so on.
+- `POST_INIT_HOOK` is a command that is run after the init (nat & routes init). The command can take some arguments from `POST_INIT_HOOK_0`, `POST_INIT_HOOK_1`, and so on.
+- `PRE_EXIT_HOOK` is a command that is run before the exit (nat & routes cleaning). The command can take some arguments from `PRE_EXIT_HOOK_0`, `PRE_EXIT_HOOK_1`, and so on.
+- `POST_EXIT_HOOK` is a command that is run after the exit (nat & routes cleaning). The command can take some arguments from `POST_EXIT_HOOK_0`, `POST_EXIT_HOOK_1`, and so on.
+- `ROUTING_DAEMON` and `ENTRYPOINT` are commands that are run after post-init (incompatible with `ONESHOT)`. They can take some arguments from `ROUTING_DAEMON_0`,/`ENTRYPOINT_0` `ROUTING_DAEMON_1`/`ENTRYPOINT_1`, and so on. If the command from `ENTRYPOINT` exits, the `ROUTING_DAEMON` is killed with a `SIGTERM`. `ROUTING_DAEMON` cannot be used without an `ENTRYPOINT`. If the `ENTRYPOINT` exits, exit hooks are run.
 
 ### Example
 In Docker Compose:
