@@ -10,7 +10,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	setup "github.com/louisroyer/docker-setup/runtime"
+	setup "github.com/nextmn/docker-setup/runtime"
 )
 
 // Initialize signals handling

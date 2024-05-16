@@ -3,10 +3,10 @@ Docker-setup is a program that allow configure a container (for networking) via 
 
 ## Usage
 This program only use environment variables for its configuration:
-- `ONESHOT`: when this environment variable is equal to `true`, the program will *not* sleep until a signal (SIGINT or SIGTERM) is received, and not perform cleaning scripts on exit 
+- `ONESHOT`: when this environment variable is equal to `true`, the program will *not* sleep until a signal (SIGINT or SIGTERM) is received, and not perform cleaning scripts on exit
 - `NAT4_IFACES` is a list of interfaces where MASQUERADE will be enabled
 - `ROUTES_INIT` is a list of routes modifications that will be performed on init
-- `ROUTES_EXIT` is a list of routes modifications that will be performed on exit 
+- `ROUTES_EXIT` is a list of routes modifications that will be performed on exit
 - `PRE_INIT_HOOK` is a command that is run before the init (nat & routes init). The command can takes some arguments from `PRE_INIT_HOOK_0`, `PRE_INIT_HOOK_1`, and so on.
 - `POST_INIT_HOOK` is a command that is run after the init (nat & routes init). The command can takes some arguments from `POST_INIT_HOOK_0`, `POST_INIT_HOOK_1`, and so on.
 - `PRE_EXIT_HOOK` is a command that is run before the exit (nat & routes cleaning). The command can takes some arguments from `PRE_EXIT_HOOK_0`, `PRE_EXIT_HOOK_1`, and so on.

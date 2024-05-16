@@ -1,3 +1,3 @@
-module github.com/louisroyer/docker-setup
+module github.com/nextmn/docker-setup
 
-go 1.19
+go 1.21
