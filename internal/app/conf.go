@@ -2,12 +2,13 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 // SPDX-License-Identifier: MIT
-package setup
+package app
 
 import (
 	"fmt"
-	"log"
 	"os"
+
+	"github.com/sirupsen/logrus"
 )
 
 // Configuration
@@ -71,7 +72,9 @@ func (conf Conf) AddHooks() {
 func (conf Conf) RunInitHook(name string) {
 	if conf.hooksList[name] != nil {
 		if err := conf.hooksList[name].RunInit(); err != nil {
-			log.Printf("Error while running %s init hook: %s", name, err)
+			logrus.WithError(err).WithFields(logrus.Fields{
+				"hook-name": name,
+			}).Error("Error while running init hook")
 		}
 	}
 }
@@ -80,23 +83,17 @@ func (conf Conf) RunInitHook(name string) {
 func (conf Conf) RunExitHook(name string) {
 	if conf.hooksList[name] != nil {
 		if err := conf.hooksList[name].RunExit(); err != nil {
-			log.Printf("Error while running %s exit hook: %s", name, err)
+			logrus.WithError(err).WithFields(logrus.Fields{
+				"hook-name": name,
+			}).Error("Error while running exit hook")
 		}
 	}
 }
 
 // Log the configuration
 func (conf Conf) Log() {
-	log.Println("Current configuration:")
-	if conf.oneshot {
-		log.Printf("\t- mode oneshot is enabled")
-	} else {
-		log.Printf("\t- mode oneshot is disabled")
-	}
-	for _, h := range conf.hooksList {
-		for _, s := range h.String() {
-			log.Printf("\t- %s\n", s)
-		}
-	}
-
+	logrus.WithFields(logrus.Fields{
+		"oneshot-mode": conf.oneshot,
+		"hooks":        conf.hooksList,
+	}).Info("Current configuration")
 }
