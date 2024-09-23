@@ -38,9 +38,6 @@ environment:
 ```
 
 ## Getting started
-### Build dependencies
-- golang
-
 ### Runtime dependencies
 - iproute2
 - iptables
