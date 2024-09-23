@@ -5,31 +5,42 @@
 package main
 
 import (
-	"log"
+	"context"
 	"os"
 	"os/signal"
 	"syscall"
 
-	setup "github.com/nextmn/docker-setup/runtime"
+	"github.com/nextmn/docker-setup/internal/app"
+	"github.com/nextmn/docker-setup/internal/logger"
+	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
 )
 
-// Initialize signals handling
-func initSignals(conf setup.Conf) {
-	cancelChan := make(chan os.Signal, 1)
-	signal.Notify(cancelChan, syscall.SIGTERM, syscall.SIGINT)
-	func(_ os.Signal) {}(<-cancelChan)
-	conf.RunExitHooks()
-	os.Exit(0)
-}
-
-// Print the configuration, then startup
 func main() {
-	log.SetPrefix("[docker-setup]")
-	conf := setup.NewConf()
-	conf.Log()
-	go initSignals(conf)
-	conf.RunInitHooks()
-	if !conf.Oneshot() {
-		select {}
+	logger.Init("docker-setup")
+	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
+	defer cancel()
+	app := &cli.App{
+		Name:                 "docker-setup",
+		Usage:                "Configure a container for networking",
+		EnableBashCompletion: true,
+		Authors: []*cli.Author{
+			{Name: "Louis Royer"},
+		},
+		Action: func(c *cli.Context) error {
+			conf := app.NewConf()
+			conf.RunInitHooks()
+			if !conf.Oneshot() {
+				select {
+				case <-ctx.Done():
+					break
+				}
+			}
+			conf.RunExitHooks()
+			return nil
+		},
+	}
+	if err := app.Run(os.Args); err != nil {
+		logrus.Fatal(err)
 	}
 }

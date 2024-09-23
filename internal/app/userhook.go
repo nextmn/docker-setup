@@ -2,15 +2,16 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 // SPDX-License-Identifier: MIT
-package setup
+package app
 
 import (
 	"bufio"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
+
+	"github.com/sirupsen/logrus"
 )
 
 // Returns a list of arguments for a command defined in from environment variables.
@@ -67,14 +68,17 @@ func (hook UserHook) Run() error {
 	stdout, _ := cmd.StdoutPipe()
 	stderr, _ := cmd.StderrPipe()
 	if err := cmd.Start(); err != nil {
-		log.Println(err)
+		logrus.WithError(err).Error("Error running user hook")
 		return err
 	}
 	scanner := bufio.NewScanner(io.MultiReader(stdout, stderr))
 	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
 		m := scanner.Text()
-		log.Printf("[%s hook] %s", hook.name, m)
+		logrus.WithFields(logrus.Fields{
+			"hook-name": hook.name,
+			"message":   m,
+		}).Info("Hook output")
 	}
 	return cmd.Wait()
 }
