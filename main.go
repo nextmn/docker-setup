@@ -27,12 +27,12 @@ func main() {
 		Authors: []*cli.Author{
 			{Name: "Louis Royer"},
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(ctx *cli.Context) error {
 			conf := app.NewConf()
 			conf.RunInitHooks()
 			if !conf.Oneshot() {
 				select {
-				case <-ctx.Done():
+				case <-ctx.Context.Done():
 					break
 				}
 			}
@@ -40,7 +40,7 @@ func main() {
 			return nil
 		},
 	}
-	if err := app.Run(os.Args); err != nil {
+	if err := app.RunContext(ctx, os.Args); err != nil {
 		logrus.Fatal(err)
 	}
 }
