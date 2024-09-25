@@ -10,8 +10,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/nextmn/logrus-formatter/logger"
+
 	"github.com/nextmn/docker-setup/internal/app"
-	"github.com/nextmn/docker-setup/internal/logger"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
