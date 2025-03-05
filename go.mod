@@ -5,7 +5,7 @@ go 1.22.7
 require (
 	github.com/nextmn/logrus-formatter v0.0.1
 	github.com/sirupsen/logrus v1.9.3
-	github.com/urfave/cli/v2 v2.27.5
+	github.com/urfave/cli/v2 v2.27.6
 )
 
 require (
