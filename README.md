@@ -56,7 +56,7 @@ cap_add:
 ```
 
 ## Author
-Louis Royer
+Louis Royer and the NextMN Contributors
 
 ## License
 MIT
