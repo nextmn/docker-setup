@@ -38,10 +38,7 @@ func main() {
 			conf := app.NewConf()
 			conf.RunInitHooks()
 			if !conf.Oneshot() {
-				select {
-				case <-ctx.Done():
-					break
-				}
+				<-ctx.Done()
 			}
 			conf.RunExitHooks()
 			return nil

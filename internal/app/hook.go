@@ -26,12 +26,8 @@ type HookMulti struct {
 // Returns hooks info
 func (hooks HookMulti) String() []string {
 	r := []string{}
-	for _, i := range hooks.init.String() {
-		r = append(r, i)
-	}
-	for _, i := range hooks.exit.String() {
-		r = append(r, i)
-	}
+	r = append(r, hooks.init.String()...)
+	r = append(r, hooks.exit.String()...)
 	return r
 }
 
