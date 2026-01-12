@@ -7,6 +7,7 @@ package app
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -61,11 +62,12 @@ func NewUserHook(name string, env string) UserHook {
 }
 
 // Run the hook if it is set
-func (hook UserHook) Run() error {
+func (hook UserHook) Run(ctx context.Context) error {
 	if !hook.isset {
 		return nil
 	}
-	cmd := exec.Command(hook.cmd, hook.args...)
+	cmd := exec.CommandContext(ctx, hook.cmd, hook.args...)
+	cmd.Env = []string{}
 	stdout, _ := cmd.StdoutPipe()
 	stderr, _ := cmd.StderrPipe()
 	if err := cmd.Start(); err != nil {

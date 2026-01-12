@@ -11,6 +11,7 @@ import (
 	"os/signal"
 	"runtime/debug"
 	"syscall"
+	"time"
 
 	"github.com/nextmn/logrus-formatter/logger"
 
@@ -37,11 +38,15 @@ func main() {
 		Version: version,
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			conf := app.NewConf()
-			conf.RunInitHooks()
+			conf.RunInitHooks(ctx)
 			if !conf.Oneshot() {
+				defer func() {
+					shCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 1*time.Second)
+					defer cancel()
+					conf.RunExitHooks(shCtx)
+				}()
 				<-ctx.Done()
 			}
-			conf.RunExitHooks()
 			return nil
 		},
 	}

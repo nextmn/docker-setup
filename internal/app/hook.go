@@ -5,17 +5,21 @@
 
 package app
 
+import (
+	"context"
+)
+
 // init & exit hooks iface
 type Hook interface {
 	String() []string
-	RunInit() error
-	RunExit() error
+	RunInit(context.Context) error
+	RunExit(context.Context) error
 }
 
 // init or exit hook iface
 type HookSingle interface {
 	String() []string
-	Run() error
+	Run(context.Context) error
 }
 
 // init & exit hooks
@@ -33,11 +37,11 @@ func (hooks HookMulti) String() []string {
 }
 
 // Runs init hook
-func (hooks HookMulti) RunInit() error {
-	return hooks.init.Run()
+func (hooks HookMulti) RunInit(ctx context.Context) error {
+	return hooks.init.Run(ctx)
 }
 
 // Runs exit hook
-func (hooks HookMulti) RunExit() error {
-	return hooks.exit.Run()
+func (hooks HookMulti) RunExit(ctx context.Context) error {
+	return hooks.exit.Run(ctx)
 }

@@ -6,6 +6,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -13,10 +14,11 @@ import (
 )
 
 // Runs iptables
-func runIPRoute(args ...string) error {
+func runIPRoute(ctx context.Context, args ...string) error {
 	r := []string{"route"}
 	r = append(r, args...)
-	cmd := exec.Command("ip", r...)
+	cmd := exec.CommandContext(ctx, "ip", r...)
+	cmd.Env = []string{}
 	return cmd.Run()
 }
 
@@ -57,13 +59,13 @@ func NewIPRouteHook(name string, env string) IPRouteHook {
 }
 
 // Run the hook if it is set
-func (hook IPRouteHook) Run() error {
+func (hook IPRouteHook) Run(ctx context.Context) error {
 	if !hook.isset {
 		return nil
 	}
 	for _, r := range hook.routes {
 		r = append(r, "proto", "static")
-		if err := runIPRoute(r...); err != nil {
+		if err := runIPRoute(ctx, r...); err != nil {
 			return err
 		}
 	}

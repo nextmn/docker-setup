@@ -6,6 +6,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -39,19 +40,19 @@ func (conf Conf) Oneshot() bool {
 }
 
 // Run exit hooks
-func (conf Conf) RunExitHooks() {
-	conf.RunExitHook("pre")
-	conf.RunExitHook("nat4")
-	conf.RunExitHook("iproute")
-	conf.RunExitHook("post")
+func (conf Conf) RunExitHooks(ctx context.Context) {
+	conf.RunExitHook(ctx, "pre")
+	conf.RunExitHook(ctx, "nat4")
+	conf.RunExitHook(ctx, "iproute")
+	conf.RunExitHook(ctx, "post")
 }
 
 // Run init hooks
-func (conf Conf) RunInitHooks() {
-	conf.RunInitHook("pre")
-	conf.RunInitHook("iproute")
-	conf.RunInitHook("nat4")
-	conf.RunInitHook("post")
+func (conf Conf) RunInitHooks(ctx context.Context) {
+	conf.RunInitHook(ctx, "pre")
+	conf.RunInitHook(ctx, "iproute")
+	conf.RunInitHook(ctx, "nat4")
+	conf.RunInitHook(ctx, "post")
 }
 
 // Add a new hook to the configuration
@@ -70,9 +71,9 @@ func (conf Conf) AddHooks() {
 }
 
 // Run an init hook
-func (conf Conf) RunInitHook(name string) {
+func (conf Conf) RunInitHook(ctx context.Context, name string) {
 	if conf.hooksList[name] != nil {
-		if err := conf.hooksList[name].RunInit(); err != nil {
+		if err := conf.hooksList[name].RunInit(ctx); err != nil {
 			logrus.WithError(err).WithFields(logrus.Fields{
 				"hook-name": name,
 			}).Error("Error while running init hook")
@@ -81,9 +82,9 @@ func (conf Conf) RunInitHook(name string) {
 }
 
 // Run an exit hook
-func (conf Conf) RunExitHook(name string) {
+func (conf Conf) RunExitHook(ctx context.Context, name string) {
 	if conf.hooksList[name] != nil {
-		if err := conf.hooksList[name].RunExit(); err != nil {
+		if err := conf.hooksList[name].RunExit(ctx); err != nil {
 			logrus.WithError(err).WithFields(logrus.Fields{
 				"hook-name": name,
 			}).Error("Error while running exit hook")

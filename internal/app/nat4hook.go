@@ -6,6 +6,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -13,8 +14,9 @@ import (
 )
 
 // Runs iptables
-func runIP4Tables(args ...string) error {
-	cmd := exec.Command("iptables", args...)
+func runIP4Tables(ctx context.Context, args ...string) error {
+	cmd := exec.CommandContext(ctx, "iptables", args...)
+	cmd.Env = []string{}
 	return cmd.Run()
 }
 
@@ -47,15 +49,15 @@ func NewNat4Hooks() Nat4Hook {
 }
 
 // Runs IPv4 NAT init hook
-func (hook Nat4Hook) RunInit() error {
+func (hook Nat4Hook) RunInit(ctx context.Context) error {
 	if !hook.isset {
 		return nil
 	}
-	if err := runIP4Tables("-I", "FORWARD", "-j", "ACCEPT"); err != nil {
+	if err := runIP4Tables(ctx, "-I", "FORWARD", "-j", "ACCEPT"); err != nil {
 		return err
 	}
 	for _, iface := range hook.ifaces {
-		if err := runIP4Tables("-t", "nat", "-A", "POSTROUTING", "-o", iface, "-j", "MASQUERADE"); err != nil {
+		if err := runIP4Tables(ctx, "-t", "nat", "-A", "POSTROUTING", "-o", iface, "-j", "MASQUERADE"); err != nil {
 			return err
 		}
 	}
@@ -63,7 +65,7 @@ func (hook Nat4Hook) RunInit() error {
 }
 
 // Runs IPv4 NAT exit hook
-func (hook Nat4Hook) RunExit() error {
+func (hook Nat4Hook) RunExit(ctx context.Context) error {
 	if !hook.isset {
 		return nil
 	}
@@ -71,7 +73,7 @@ func (hook Nat4Hook) RunExit() error {
 	var lasterr error
 	for _, iface := range hook.ifaces {
 		// if there is an error, we continue: will return at the end
-		if err := runIP4Tables("-t", "nat", "-D", "POSTROUTING", "-o", iface, "-j", "MASQUERADE"); err != nil {
+		if err := runIP4Tables(ctx, "-t", "nat", "-D", "POSTROUTING", "-o", iface, "-j", "MASQUERADE"); err != nil {
 			errcount++
 			lasterr = err
 		}
