@@ -81,7 +81,7 @@ func (hook Nat4Hook) RunExit(ctx context.Context) error {
 	if errcount == 1 {
 		return lasterr
 	} else if errcount > 1 {
-		return fmt.Errorf("%i iptable errors", errcount)
+		return fmt.Errorf("%d iptable errors", errcount)
 	}
 	return nil
 }
