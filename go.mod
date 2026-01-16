@@ -3,7 +3,7 @@ module github.com/nextmn/docker-setup
 go 1.25.5
 
 require (
-	github.com/nextmn/logrus-formatter v0.2.0
+	github.com/nextmn/logrus-formatter v0.2.1
 	github.com/sirupsen/logrus v1.9.4
 	github.com/urfave/cli/v3 v3.6.1
 )
