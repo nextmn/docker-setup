@@ -5,7 +5,7 @@ go 1.25.5
 require (
 	github.com/nextmn/logrus-formatter v0.2.1
 	github.com/sirupsen/logrus v1.9.4
-	github.com/urfave/cli/v3 v3.7.0
+	github.com/urfave/cli/v3 v3.8.0
 )
 
 require golang.org/x/sys v0.40.0 // indirect
