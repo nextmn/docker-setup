@@ -12,6 +12,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 )
@@ -91,9 +92,9 @@ func (hook UserHook) String() []string {
 	if !hook.isset {
 		return []string{fmt.Sprintf("%s hook ($%s) is not set.", hook.name, hook.env)}
 	}
-	args := ""
+	var args strings.Builder
 	for _, a := range hook.args {
-		args += fmt.Sprintf(", %s", a)
+		args.WriteString(fmt.Sprintf(", %s", a))
 	}
-	return []string{fmt.Sprintf("%s hook is set with : [%s%s]", hook.name, hook.cmd, args)}
+	return []string{fmt.Sprintf("%s hook is set with : [%s%s]", hook.name, hook.cmd, args.String())}
 }

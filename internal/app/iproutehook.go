@@ -79,11 +79,11 @@ func (hook IPRouteHook) String() []string {
 		return []string{fmt.Sprintf("%s hook ($%s) is not set.", hook.name, hook.env)}
 	}
 	for i, route := range hook.routes {
-		args := ""
+		var args strings.Builder
 		for _, cmd := range route {
-			args += fmt.Sprintf(", %s", cmd)
+			args.WriteString(fmt.Sprintf(", %s", cmd))
 		}
-		r = append(r, fmt.Sprintf("%s #%d hook is set with : [ip, route%s, proto, static]", hook.name, i, args))
+		r = append(r, fmt.Sprintf("%s #%d hook is set with : [ip, route%s, proto, static]", hook.name, i, args.String()))
 	}
 	return r
 }
