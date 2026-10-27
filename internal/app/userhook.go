@@ -84,6 +84,9 @@ func (hook UserHook) Run(ctx context.Context) error {
 			"message":   m,
 		}).Info("Hook output")
 	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
 	return cmd.Wait()
 }
 
@@ -94,7 +97,7 @@ func (hook UserHook) String() []string {
 	}
 	var args strings.Builder
 	for _, a := range hook.args {
-		args.WriteString(fmt.Sprintf(", %s", a))
+		fmt.Fprintf(&args, ", %s", a)
 	}
 	return []string{fmt.Sprintf("%s hook is set with : [%s%s]", hook.name, hook.cmd, args.String())}
 }
